@@ -7,9 +7,9 @@
 if(isset($_POST['index'])){
 
 
-$username = $_POST['username'];
-$email = $_POST['email'];
-$password = $_POST['password'];
+$username = isset($_POST['username']) ? $_POST['username'] : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
+$password = isset($_POST['password']) ? $_POST['password'] : '';
 
 
 $username = mysqli_real_escape_string($connection, $username);
@@ -33,22 +33,14 @@ if(!$select_user_query) {
      
     }
 
-     if($email === $db_email && md5($password) === $db_password) {
-
+    $message2 = "Email or password is not correct";
+    if(isset($db_email) && $email === $db_email && md5($password) === $db_password) {
         $_SESSION['username'] = $db_username;
         $_SESSION['email'] = $email;
         $_SESSION['password'] = $db_password;
-
+        $message2 = '';
         header("Location: main.php");
-
-    } else {
-        
-        header("Location: index.php");
-        $message2 = "Username or password is not correct";
-        
-    }
-
-
+        }
 }
 
 ?>
@@ -63,6 +55,9 @@ body {background-color:#c9d6df !important;}
     <h2>Autorizācija</h2>
     <div class="row">
         <div class="col-md-12 form-group">
+
+       <h6> <?= isset($message2) ? $message2 : ''  ?> </h6> 
+
         <form action="index.php" method="post">
 
      

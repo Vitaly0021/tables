@@ -5,46 +5,34 @@
 <?php 
 
 if(isset($_POST['submit'])) {
+    $name    = trim($_POST['name']);
+    $middle_name    = trim($_POST['middle_name']);
+    $surname    = trim($_POST['surname']);
+    $email    = trim($_POST['email']);
+    $password = md5(trim($_POST['password']));
 
-$name    = trim($_POST['name']);
-$middle_name    = trim($_POST['middle_name']);
-$surname    = trim($_POST['surname']);
-$email    = trim($_POST['email']);
-$password = md5(trim($_POST['password']));
+    if(!empty($name) && !empty($surname) && !empty($email) && !empty($password)) {
+        $name       = mysqli_real_escape_string($connection, $name);
+        $middle_name    = mysqli_real_escape_string($connection, $middle_name);
+        $surname    = mysqli_real_escape_string($connection, $surname);
+        $email    = mysqli_real_escape_string($connection, $email);
+        $password    = mysqli_real_escape_string($connection, $password);
 
-if(!empty($name) && !empty($surname) && !empty($email) && !empty($password)) {
+        $query = "INSERT INTO users (name, middle_name, surname, email, password) ";
+        $query .="VALUES ('{$name}', '{$middle_name}', '{$surname}' , '{$email}', '{$password}')";
+        $register_user_query = mysqli_query($connection, $query);
 
-
-$name       = mysqli_real_escape_string($connection, $name);
-$middle_name    = mysqli_real_escape_string($connection, $middle_name);
-$surname    = mysqli_real_escape_string($connection, $surname);
-$email    = mysqli_real_escape_string($connection, $email);
-$password    = mysqli_real_escape_string($connection, $password);
-
-
-$query = "INSERT INTO users (name, middle_name, surname, email, password) ";
-$query .="VALUES ('{$name}', '{$middle_name}', '{$surname}' , '{$email}', '{$password}')";
-$register_user_query = mysqli_query($connection, $query);
-
-if(!$register_user_query) {
-die("QUERY FAILED ". mysqli_error($connection) . ' ' .
-mysqli_errno($connection));
-
-}
-
-    $message = "Your Registration has been submitted";
-
+        if(!$register_user_query) {
+            die("QUERY FAILED ". mysqli_error($connection) . ' ' .
+            mysqli_errno($connection));
+        }
+        $message = "Your Registration has been submitted";
+    } else {
+        $message = "Fields can not be empty!";
+    }
 } else {
-
-    $message = "Fields can not be empty";
-
-}
-
-} else {
-
     $message = "";
 }
-
 
 
 
@@ -86,7 +74,7 @@ body {background-color:#c9d6df !important;}
         <div class="col-md-12 form-group">
           <!-- <p class="registartion">Do not have an account?</p> -->
 
-          <span><a href="index.php" class="register btn btn-secondary btn-sm btn-login ">Back to Login</a> </span> 
+          <span class="register btn btn-secondary btn-sm btn-login " onclick="window.location.href = 'index.php'">Back to Login</span> 
 
         <!-- <form action="registration.php" method="post">
           <input type="submit" class="btn btn-secondary btn-sm btn-success register" name="registration" value="Registration"> 

@@ -20,5 +20,4 @@
 
 // $connection->close();
 
-
 ?>
